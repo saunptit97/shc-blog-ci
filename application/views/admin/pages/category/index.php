@@ -151,7 +151,11 @@ $(document).ready(function() {
 				data: data,
 				success: function(data){
 					
-				}
+				},
+                fail: function(data){
+                    $(".print-error-msg").css("display" , "block");
+                    $(".print-error-msg").html('Category not add');
+                }
 			})
 			.done(function() {
 				console.log("success");
