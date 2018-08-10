@@ -1,28 +1,6 @@
-   <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-         rel = "stylesheet">
-      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+>
 <style>
-    .box{
-        padding: 30px;
-    }
-    .box-body .col-md-4{
-        padding: 0;
-    }
-    .box-body .col-md-4 input{
-         margin: 20px 0;
-    }
-    .add-new-post .pages-action-button button{
-        background: #eb5202;
-        color: #fff;
-        margin: 20px 0;
-        padding: 7px 15px;
-        margin-top: 30px;
-        margin-right: 15px;
-    }
-    .pages-action-button{
-        float: right;
-    }
+   
 </style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -67,12 +45,7 @@
                                         </div>
                                    <!--   -->
                                 </div>
-                                <div class="col-md-4">
-
-                                </div>
-                                <div class="col-md-4">
-
-                                </div>
+                               
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                             <tr>
@@ -90,31 +63,8 @@
                             </thead> 
                             <tbody id="result">
                                 
-                            <?php
-                            foreach($posts as $key => $post){ ?>
-                                <tr>
-                                    <td><input type="checkbox" value="<?php echo $post->id?> name="checkbox-delete"/></td>
-                                    <td><?php echo $post->id ?></td>
-                                    <td><?php echo $post->title ?></td>
-                                    <td><?php echo $post->slug ?></td>
-                                    <td><?php echo $post->published_at ?></td>
-                                    <td><?php echo "Author"?></td>
-                                    <td>
-                                        <?php 
-                                          if($post->status == 0){
-                                                echo "Draft";
-                                            }else{
-                                                echo "Publish";
-                                            }
-                                        ?>
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                     
                             </tbody>
+                            <?php echo $links ?>
                         </table>
                     </div>
                     <!-- /.box-body -->

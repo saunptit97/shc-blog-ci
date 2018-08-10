@@ -1,31 +1,5 @@
  <style> 
-  .box{
-        padding: 30px;
-    }
-    .box-body .col-md-4{
-        padding: 0;
-    }
-    .box-body .col-md-4 input{
-         margin: 20px 0;
-    }
-    .add-new-post .pages-action-button button{
-        background: #eb5202;
-        color: #fff;
-        margin: 20px 0;
-        padding: 7px 15px;
-        margin-top: 30px;
-        margin-right: 15px;
-    }
-    .pages-action-button{
-        float: right;
-    }
-    .add-cat{
-    	padding: 0 20px;
-    }
-    .add-cat button{
-    	margin-top: 20px;
-		margin-right: 10px;
-    }
+  
  </style>   
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -54,9 +28,7 @@
                     <!-- /.box-header -->
                     <div class="add-new-post">
                         <div class="pages-action-button">
-                            <a href="<?php echo base_url('admin/category/add') ?>">
-                                <button class="btn btn-default" style="margin-bottom: 20px">New Category</button>
-                            </a>
+                                <button class="btn btn-default new-cat-button" style="margin-bottom: 20px">New Category</button>
                         </div>
                     </div>
                     <div class="box-body">
@@ -77,7 +49,7 @@
                         </div>
                     </div>
                         	<div class="row">
-	                        	<div class="col-md-6">
+	                        	<div class="col-md-12 data-table-cat">
 			                        <table id="example2" class="table table-bordered table-hover">
 			                            <thead>
 			                            <tr>
@@ -88,20 +60,24 @@
 			                            </tr>
 			                            </thead> 
 			                            <tbody id="result">
-			                          		
+			                          		<?php foreach($categories as $key => $category) : ?>
+                                            <tr>
+                                                <td> <?php echo (int) ($key+1) ?></td>
+                                                <td><?php echo  $category->name ?></td>
+                                                <td>
+                                                    <a href="#" style="color: #0df100" onclick="editFunction(<?php echo $category->id ?>)"><span class="glyphicon glyphicon-edit"></span></a>
+                                                    <a href="<?php echo base_url('admin/category/delete/') . $category->id ?>" style="color: darkred" onclick=" return confirm('Are you sure delete this category?')"><span class="glyphicon glyphicon-trash"></span></a></td>
+                                            </tr>
+                                            <?php endforeach ?>
 			                            </tbody>
 			                        </table>
 		                    	</div>
-		                    	<div class="col-md-6 add-cat">
-									<form id="form-add-cat" method="post" action="<?php echo base_url('admin/category/add')?>">
-										<span class="print-error-msg alert alert-danger" style="display: none"></span>
-										<span class="print-success-msg alert alert-success" style="display: none"></span>
-										<title>Add Category</title>
-			                    		<label>Category</label>
-			                    		<input  class ="form-control" type="text" value="" id="category" name="category" placeholder="Category" />
-										<button class="btn btn-primary" id="submit-cat">Add Category</button><button class="btn btn-default">Back</button>	
-									</form>	
+		                    	<div class="col-md-6 add-cat cat">
+									<?php $this->load->view('admin/pages/category/add')?>
 		                    	</div>
+                                <div class="col-md-6 update-cat cat">
+                                    <?php $this->load->view('admin/pages/category/edit')?>
+                                </div>
 		                    </div>
 	                    </div>
                     </div>
@@ -117,23 +93,19 @@
 
 <script>
 $(document).ready(function() {
-		$.ajax({
-			url: '<?php echo base_url('admin/category/fetch_data');?>',
-			type: 'POST',
-			data: {data : '1'},
-			success: function(data){
-				$("#result").html(data);
-			}
-		})
-		.done(function() {
-			console.log("success");
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			console.log("complete");
-		});
+    $(".add-cat").css("display", "none");
+    $(".update-cat").css("display", "none");
+    $(".new-cat-button").click(function(){
+        $(".add-cat").css("display", "block");
+        $(".update-cat").css("display", "none");
+        $(".data-table-cat").removeClass('col-md-12').addClass('col-md-6');
+    });
+    $(".back-btn").click(function(){
+        event.preventDefault(); 
+        $(".add-cat").css("display", "none");
+         $(".update-cat").css("display", "none");
+        $(".data-table-cat").removeClass('col-md-6').addClass('col-md-12');
+    });
 		$(document).keyup(function(e) {
 		  if (e.keyCode == 13) { alert('enter') }     // enter
 		  if (e.keyCode == 27) { alert('esc') }   // esc
@@ -141,36 +113,69 @@ $(document).ready(function() {
 	/* Get the checkboxes values based on the class attached to each check box */
 	
 		$("#submit-cat").click(function(event){
-		//	var category = $("#category-name").val();
-		event.preventDefault(); 
-		var data = $("#form-add-cat").serialize()
-			$.ajax({
-				url: "<?php echo base_url('admin/category/add') ?>",
-				type: 'POST',
-				dataType: "json",
-				data: data,
-				success: function(data){
-					
-				},
-                fail: function(data){
-                    $(".print-error-msg").css("display" , "block");
-                    $(".print-error-msg").html('Category not add');
+    		event.preventDefault(); 
+    		var data = $("#form-add-cat").serialize();
+            $.ajax({
+                url: "<?php echo base_url('admin/category/add') ?>",
+                type: 'POST',
+                dataType: "json",
+                data: data,
+                success: function(data){
+                    if(data.error){
+                        $(".print-error-msg").css("display" , "block");
+                        $(".print-error-msg").html(data.error);
+                    }else{
+                        location.reload();  
+                    }
+                    
                 }
-			})
-			.done(function() {
-				console.log("success");
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
-			
+                //,
+                // error: function(data){
+                //     $(".print-error-msg").css("display" , "block");
+                //     $(".print-error-msg").html('Category not add');
+                // }
+            });
 		});
+        
 });
 
-
-			
+function editFunction(id){
+    $(".update-cat").css("display", "block");
+    $(".data-table-cat").removeClass('col-md-12').addClass('col-md-6');
+    $.ajax({
+        url: '<?php echo base_url('admin/category/edit/')?>' + id,
+        type: 'POST',
+        dataType: 'json',
+        data: {param1: 'value1'},
+        success: function(data){
+            $("#category-update").val(data.data['name']);
+             $("#id-category").val(data.data['id']);
+        }
+    });
+    
+}
+   $("#submit-update-cat").click(function(event){
+        event.preventDefault(); 
+        var data = $("#form-update-cat").serialize();
+        $.ajax({
+            url: '<?php echo base_url('admin/category/update')?>',
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function(data){
+                    if(data.error){
+                        $(".print-error-msg").css("display" , "block");
+                        $(".print-error-msg").html(data.error);
+                    }else{
+                        location.reload();  
+                    }
+                    
+                },
+            error: function(data){
+                $(".print-error-msg").css("display" , "block");
+                $(".print-error-msg").html('Category not add');
+            }
+        })
+        });
 
 </script>

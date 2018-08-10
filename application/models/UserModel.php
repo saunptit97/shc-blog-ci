@@ -10,16 +10,24 @@ class UserModel extends CI_Model {
 		$this->load->database();
 	}
 	public function fetch_data(){
-		$query = $this->db->get('users');
+		$query = $this->db->get('user');
 		return $query->result();
 	}
 	public function check_login($data){
-		return $this->db->get_where('users', array('email' => $data['username'], 'password' => $data['password']))->result();
+		return $this->db->get_where('user', array('email' => $data['username'], 'password' => $data['password']))->result();
 	}
 	public function get_user_id($id){
 		$this->db->where('id', $id);
-		$data = $this->db->get('users')->row();
+		$data = $this->db->get('user')->row();
 		return $data;
+	}
+	public function create_user($data){
+		$this->db->insert('user', $data);
+	}
+	public function get_last_id(){
+		$this->db->select_max('id');
+		$query = $this->db->get('user');
+		return $query->row();
 	}
 }
 

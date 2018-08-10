@@ -4975,3 +4975,30 @@ table.text-center th {
     white-space: normal !important;
   }
 }
+.box{
+        padding: 30px;
+    }
+    .box-body .col-md-4{
+        padding: 0;
+    }
+    .box-body .col-md-4 input{
+         margin: 20px 0;
+    }
+    .add-new-post .pages-action-button button{
+        background: #eb5202;
+        color: #fff;
+        margin: 20px 0;
+        padding: 7px 15px;
+        margin-top: 30px;
+        margin-right: 15px;
+    }
+    .pages-action-button{
+        float: right;
+    }
+    .cat{
+      padding: 0 20px;
+    }
+    .cat button{
+      margin-top: 20px;
+    margin-right: 10px;
+    }

@@ -1,7 +1,7 @@
   <!DOCTYPE html>
 <html>
 <?php $this->load->view('admin/header/header-top'); ?>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">
 
   <?php $this->load->view('admin/header/header-content'); ?>

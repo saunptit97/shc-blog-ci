@@ -2,16 +2,20 @@
 <script src="<?php echo base_url();?>bower_components/jquery/dist/jquery.min.js"></script>
 <script>
     $(function () {
-        // Replace the <textarea id="editor1"> with a CKEditor
-        // instance, using default configuration.
-        CKEDITOR.replace('editor1')
-        //bootstrap WYSIHTML5 - text editor
-        $('.textarea').wysihtml5()
+       CKEDITOR.replace( 'editor1',
+        {
+            extraPlugins : 'uicolor',
+            height: '400px',
+            width: '100%',
+        });
     })
 </script>
 <style>
     .box-add-post input{
-        margin: 5px 0px;
+        margin: 10px 0px;
+    }
+    .box-add-post span{
+        margin: 10px 0px;
     }
 </style>
 <div class="content-wrapper">
@@ -50,19 +54,7 @@
                         <div class="form-group">
                             <label>Title</label>
                             <input id="post-title" type="text" class="form-control" name="title" required="true" value="<?php echo $post->title ?>" />
-                        </div>
-                        <!-- /.form-group -->
-                        <label>Body</label>
-                           <textarea id="editor1" name="body" rows="10" cols="80" required="true">
-                                <?php echo $post->body ?>
-                            </textarea>
-                         <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-6">
-                        <label>Image</label>
-                        <input type="file" name="fileToUpload" id="fileToUpload" id="post-image" />
-                        <label>Category</label>
+                             <label>Category</label>
                         <select class="form-control" name="category" id="post-category" >
                             <?php 
                                 foreach ($categories as $key => $value) { ?>
@@ -71,6 +63,17 @@
                                     </option>
                             <?php } ?>
                         </select>
+                        </div>
+                        <!-- /.form-group -->
+                      
+                          
+                         <!-- /.form-group -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-6">
+                        <label>Image</label>
+                        <input type="file" name="fileToUpload" id="fileToUpload" id="post-image" />
+                       
                         <label>Status</label>
                         <select class="form-control" name="status" id="post-status" value="1" >
                             <option value="0" <?php if($post->status ==0) echo "selected"?> >Draft</option>
@@ -78,7 +81,14 @@
                         </select>
                         <label>Tags</label >
                         <input id="post-tag"  type="text" class="form-control" name="tags" required="true" value="<?php echo $post->tags ?> "/>
-                        <button class="btn btn-primary" id="post-submit" type="submit" name="submit">Submit</button>
+                      
+                    </div>
+                    <div class="col-md-12">
+                          <label>Body</label>
+                            <textarea id="editor1" name="body" rows="50" cols="80" required="true">
+                                <?php echo $post->body ?>
+                            </textarea>
+                              <button class="btn btn-primary" id="post-submit" type="submit" name="submit">Submit</button>
                     </div>
                     </form> 
                     <!-- /.col -->
@@ -95,15 +105,3 @@
     </section>
     <!-- /.content -->
 </div>
-<script type="text/javascript">
-   // $("#post-submit").click(function(event){
-     //   var data = $('#form_login').serialize();
-       // alert(data);
-        // $.ajax({
-        //     url: <?php //echo base_url('admin/post/addpost');?>,
-        //     context: document.body
-        // }).done(function() {
-        //     $( this ).addClass( "done" );
-        // });
-    //});
-</script>

@@ -13,6 +13,16 @@ class Post extends CI_Controller {
 	public function index()
 	{   $data['content'] = 'admin/pages/post/index';
         $data['posts'] = $this->postmodel->order_desc();
+        $this->load->library('pagination');
+
+        $config['base_url'] = base_url() . 'paging/index';
+        // $config['total_rows'] =3;
+        $config['per_page'] = 1;
+        $config["uri_segment"] = 3;
+
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+        
 		$this->load->view('admin/index', $data);
 	}
     public function fetch(){
@@ -35,7 +45,7 @@ class Post extends CI_Controller {
                     <td>'.(int) ($key + 1) .'</td>
                     <td>'. $value->title .'</td>
                     <td>'.$value->slug.'</td>
-                    <td>'.$value->published_at.'</td>
+                    <td>'.$value->created_at.'</td>
                     <td>'. $user->name.'</td>
                     <td>'.$status.'</td>
                     <td>
@@ -70,7 +80,7 @@ class Post extends CI_Controller {
                     $data = array(
                         'title' =>  $title,
                         'body' => $body,
-                        'published_at' => date("Y:m:d"),
+                        'created_at' => date("m.d.Y H:i:s"),
                         'id_author' => 1,
                         'id_category' => (int)$category,
                         'img' => $image,

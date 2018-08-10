@@ -20,7 +20,20 @@ class CategoryModel extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->delete('category');
 	}
-	
+	public function get_last_id(){
+		$this->db->select_max('id');
+		$query = $this->db->get('category');
+		return $query->result();
+	}
+	public function find_category($id){
+		$this->db->where('id', $id);
+		$data = $this->db->get('category')->row();
+		return $data;
+	}
+	public function update($data, $id){
+		$this->db->where('id',$id);
+		$this->db->update('category', $data);
+	}
 }
 
 /* End of file CategoryModel.php */

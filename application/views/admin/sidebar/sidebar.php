@@ -65,7 +65,7 @@
         </li>
         <li class="treeview">
           <a href="<?php echo base_url(); ?>#">
-            <i class="fa fa-edit"></i> <span>User</span>
+            <i class="fa fa-user"></i> <span>User</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
