@@ -34,6 +34,13 @@ class CategoryModel extends CI_Model {
 		$this->db->where('id',$id);
 		$this->db->update('category', $data);
 	}
+	public function check_unique_category($id = '', $category) {
+        $this->db->where('name', $category);
+        if($id) {
+            $this->db->where_not_in('id', $id);
+        }
+        return $this->db->get('category')->num_rows();
+    }
 }
 
 /* End of file CategoryModel.php */

@@ -27,19 +27,6 @@
         <li class="header">MAIN NAVIGATION</li>
         <li class="treeview">
           <a href="<?php echo base_url(); ?>#">
-            <i class="fa fa-edit"></i> <span>Forms</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?php echo base_url(); ?>admin/pages/forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
-            <li><a href="<?php echo base_url(); ?>admin/pages/forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
-            <li><a href="<?php echo base_url(); ?>admin/pages/forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="<?php echo base_url(); ?>#">
             <i class="fa fa-edit"></i> <span>Post</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -76,38 +63,6 @@
             <li><a href="<?php echo base_url(); ?>admin/user"><i class="fa fa-circle-o"></i>All User</a></li>
           </ul>
         </li>
-        <li class="treeview">
-          <a href="<?php echo base_url(); ?>#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?php echo base_url(); ?>admin/pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="<?php echo base_url(); ?>admin/pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="<?php echo base_url(); ?>admin/pages/calendar.html">
-            <i class="fa fa-calendar"></i> <span>Calendar</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
-              <small class="label pull-right bg-blue">17</small>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="<?php echo base_url(); ?>admin/pages/mailbox/mailbox.html">
-            <i class="fa fa-envelope"></i> <span>Mailbox</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-yellow">12</small>
-              <small class="label pull-right bg-green">16</small>
-              <small class="label pull-right bg-red">5</small>
-            </span>
-          </a>
-        </li>
-
       </ul>
     </section>
     <!-- /.sidebar -->

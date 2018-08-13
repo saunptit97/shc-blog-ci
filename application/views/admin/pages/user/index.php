@@ -237,7 +237,7 @@
                         <div class="form-group test">
                             <label>Password</label><span class="required">*</span>
                             <input type="password" name="password" id="password_edit" class="form-control">
-                            <small>[This password have least one uppercase letter and lowercase letter]</small>
+                            <small>[This password have least one uppercase letter, lowercase letter, number and 5 characters in length.]</small>
                             <div id="error_password_edit" class="required password"></div>
                         </div>
                         <div class="form-group test">

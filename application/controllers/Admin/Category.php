@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Category extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -35,22 +34,39 @@ class Category extends CI_Controller {
  	}
 
  	public function add(){
- 		$this->form_validation->set_rules('category', 'category', 'required|is_unique[category.name]');
-	    if ($this->form_validation->run() == FALSE)
-        {
-             echo json_encode(['error' => validation_errors()]);
-        }else{
-           	$data = array(
-           		'name' => $_POST['category'],
-              'created_at' => date('m.d.Y H:i:s') 
-           	);
-
-           	$this->categorymodel->create($data);
-           	echo json_encode(['success' => 'TRUE']);	
-        }
- 	}
+    $rules  = array(
+        array(
+          'field' => 'category',
+          'label' => 'Category',
+          'rules' => 'required|is_unique[category.name]' 
+        ),
+        array(
+          'field' => 'description',
+          'label' => 'Description',
+          'rules' => 'required'
+        )
+    );
+ 		$this->form_validation->set_rules($rules);
+ 	  $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+    if ($this->form_validation->run()) {
+      $category = array(
+         'name' => $_POST['category'],
+         'description' => $_POST['description'],
+         'created_at' => date('Y-m-d h:i:sa')
+      );
+      $this->categorymodel->create($category);
+      $data['success'] = true;
+      echo json_encode($data);
+    }
+    else {
+      foreach ($_POST as $key => $value) {
+        $data['messages'][$key] = form_error($key);
+      }
+      echo json_encode($data);
+    }
+   // echo json_encode($data);
+  }
  	public function edit($id){
-
  		$data = $this->categorymodel->find_category($id);
  		echo json_encode(['data' => $data]);
  	}
@@ -58,22 +74,49 @@ class Category extends CI_Controller {
  		$this->categorymodel->delete($id);
  		redirect(base_url('admin/category/index'));
  	}
- 	public function update(){
- 		$this->form_validation->set_rules('category', 'category', 'required|is_unique[category.name]');
-	    if ($this->form_validation->run() == FALSE)
-        {
-             echo json_encode(['error' => validation_errors()]);
-       }else{
-	        $id =  $_POST['id-category'];
-           	$data = array(
-           		'id'   => $id,
-           		'name' => $_POST['category'] 
-           	);
-
-           	$this->categorymodel->update($data, $id);
-           	echo json_encode(['success' => 'TRUE']);	
-        }
+ 	public function update($id){
+ 		 $rules  = array(
+        array(
+          'field' => 'category',
+          'label' => 'Category',
+          'rules' => 'required|callback_category_check'
+        )
+      );
+    $this->form_validation->set_rules($rules);
+    $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+    if ($this->form_validation->run()) {
+      $category = array(
+         'id'  => $id,
+         'name' => $_POST['category'],
+         'description' => $_POST['description'],
+         'created_at' => date('Y-m-d h:i:sa')
+      );
+      $this->categorymodel->update($category, $id);
+      $data['success'] = true;
+      
+    }else {
+       foreach ($_POST as $key => $value) {
+        $data['messages'][$key] = form_error($key);
+      }
+    }
+    echo json_encode($data);
  	}
+
+  public function category_check($category){        
+     if(isset($_POST['id'])){
+       $id = $_POST['id'];
+       $result = $this->categorymodel->check_unique_category($id, $category);
+       if($result !=0){
+        $this->form_validation->set_message('category_check','Category '.$category .'  already exists');
+        return false;
+       }else{
+        return true;
+       }
+
+     }else{
+      return false;
+     }
+  }
 }
 
 /* End of file Category.php */

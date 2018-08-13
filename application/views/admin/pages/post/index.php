@@ -76,6 +76,37 @@
     </section>
     <!-- /.content -->
 </div>
+
+<div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Post</h4>
+          </div>
+          <div class="modal-body">
+            <form id="form_category">
+                <div id="the-message"></div>
+                <input type="hidden" id="id" />
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" name="category" id="category" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" id="description" class="form-control">
+                </div>
+                <button class="btn btn-primary" id="submit_category">Submit</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+</div>
 <script type="text/javascript">
     jQuery(document).ready(function() {
         load_data();
