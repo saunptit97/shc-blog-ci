@@ -120,6 +120,69 @@ class User extends CI_Controller {
         }
         return TRUE;
     }
+    public function user_ajax(){
+    $columns = array( 
+                        0 =>'id', 
+                        1 =>'name',
+                        2 =>'email',
+                        3 =>'address',
+                        4 =>'phone',
+                        5 =>'level',
+                        6 =>'status',
+                        7 =>'created_at'
+                    );
+      $limit = $this->input->post('length');
+      $start = $this->input->post('start');
+      $order = $columns[$this->input->post('order')[0]['column']];
+      $dir = $this->input->post('order')[0]['dir'];
+
+      $totalData = $this->usermodel->get_all_user();
+          
+      $totalFiltered = $totalData; 
+          
+      if(empty($this->input->post('search')['value']))
+      {            
+          $posts = $this->usermodel->all_user($limit,$start,$order,$dir);
+      }
+      else {
+          $search = $this->input->post('search')['value']; 
+
+          $posts =  $this->usermodel->user_search($limit,$start,$search,$order,$dir);
+
+          $totalFiltered = $this->usermodel->user_search_count($search);
+      }
+
+      $data = array();
+      if(!empty($posts))
+      {
+          foreach ($posts as $post)
+          {
+
+              $nestedData['id'] = $post->id;
+              $nestedData['name'] = $post->name;
+              $nestedData['email'] = $post->email;
+              $nestedData['address'] = $post->address;
+              $nestedData['phone'] = $post->phone;
+              $nestedData['role'] = $post->role;
+              $nestedData['status'] = $post->status;
+              $nestedData['created_at'] = $post->created_at;
+              $nestedData['action'] = '
+                                      <a href="#" style="color: darkred" onclick="deleteCategory('.$post->id.')"><span class="glyphicon glyphicon-trash"></span></a>';
+              
+              $data[] = $nestedData;
+
+          }
+      }
+        
+      $json_data = array(
+                  "draw"            => intval($this->input->post('draw')),  
+                  "recordsTotal"    => intval($totalData),  
+                  "recordsFiltered" => intval($totalFiltered), 
+                  "data"            => $data   
+                  );
+          
+      echo json_encode($json_data); 
+  }
 }
 
 /* End of file User.php */

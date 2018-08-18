@@ -2,6 +2,13 @@
          rel = "stylesheet">
       <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      <link href="<?php echo base_url('assets/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet" />
+
+<!-- jQuery -->
+<script src="<?php echo base_url('assets/jquery/jquery-2.2.3.min.js') ?>"></script>
+
+<!-- DataTables JS -->
+<script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js') ?>" ></script>
 <style>
     .box{
         padding: 30px;
@@ -69,7 +76,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h2 class="box-title">Posts</h2>
+                        <h2 class="box-title">User</h2>
 
                     </div>
                     <!-- /.box-header -->
@@ -81,22 +88,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                                <div class="col-md-4">
-                                  
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search&hellip;" id="search" name="search" onchange="Change()">
-                                            <span class="input-group-btn">
-                                                <button type="submit" class="btn btn-default" height="34px" style="height: 34px;"><i class="fa fa-search"></i></button>
-                                            </span>
-                                        </div>
-                                   <!--   -->
-                                </div>
-                                <div class="col-md-4">
-
-                                </div>
-                                <div class="col-md-4">
-
-                                </div>
+                
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                             <tr>
@@ -112,20 +104,7 @@
                             </tr>
                             </thead> 
                             <tbody id="result">
-                                <?php foreach($users as $key => $user ): ?>
-                                    <tr>
-                                        <td><?php echo (int) ($key +1) ?></td>
-                                        <td><?php echo $user->name ?></td>
-                                        <td><?php echo $user->email ?></td>
-                                        <td><?php echo $user->address ?></td>
-                                        <td><?php echo $user->phone ?></td>
-                                        <td><?php echo $user->role ?></td>
-                                        <td><?php echo $user->status ?></td>
-                                        <td><?php echo $user->created_at ?></td>
-                                        <td> <a href="#" style="color: #0df100"><span class="glyphicon glyphicon-edit" onclick="edit_user(<?php echo $user->id ?>)"></span></a>
-                                                    <a href="<?php echo base_url('admin/user/delete/') . $user->id ?>" style="color: darkred" onclick=" return confirm('Are you sure delete this category?')"><span class="glyphicon glyphicon-trash"></span></a></td>
-                                    </tr>
-                                <?php endforeach?>    
+                               
                             </tbody>
                         </table>
                     </div>
@@ -260,6 +239,30 @@
     <!-- /.content -->
 </div>
 <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#example2').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+            "url": "<?php echo base_url('admin/user/user_ajax') ?>",
+            "dataType": "json",
+            "type": "POST",
+            "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "email" },
+                { "data": "address" },
+                { "data": "phone"},
+                { "data": "role"},
+                { "data": "status"},
+                { "data": "created_at"},
+                { "data": "action"},
+                ]    
+
+        }); 
+     });
    $("#submit").click(function(event) {
        event.preventDefault();
        var data = $("#form-user").serialize();
@@ -279,23 +282,9 @@
        });    
    });
     function edit_user(id){
+        alert('AAA');
         $("#name_edit").val('AA');
-        $("#myModalEdit").modal('show');
-        // $.ajax({
-        //     url: '/path/to/file',
-        //     type: 'default GET (Other values: POST)',
-        //     dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-        //     data: {param1: 'value1'},
-        // })
-        // .done(function() {
-        //     console.log("success");
-        // })
-        // .fail(function() {
-        //     console.log("error");
-        // })
-        // .always(function() {
-        //     console.log("complete");
-        // });
+        $("#myModalEdit").modal('show');                        
             
     }
 </script>

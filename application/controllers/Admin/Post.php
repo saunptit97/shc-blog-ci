@@ -22,7 +22,7 @@ class Post extends CI_Controller {
 
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
-        
+        $data['categories'] = $this->categorymodel->fetch_data();
 		$this->load->view('admin/index', $data);
 	}
     public function fetch(){
@@ -151,7 +151,6 @@ class Post extends CI_Controller {
     public function massdelete(){
          $_POST['checkbox-delete'];
     }
-
     public function search(){
         $string = $_POST['search'];
         $data['posts'] = $this->postmodel->find_by_name($string)->result();
@@ -184,6 +183,104 @@ class Post extends CI_Controller {
     return $str;
 
     }
+    public function add_ajax(){  
+       $this->form_validation->set_rules('title', 'Title', 'required');
+            $this->form_validation->set_rules('tags', 'Tag', 'required');
+            if ($this->form_validation->run() == TRUE) {
+                $title = $_POST['title'];
+                $body = $_POST['body'];
+                $category = $_POST['category'];
+                $status = $_POST['status'];
+                $tags = $_POST['tags'];
+                $config['upload_path']   = './uploads/'; 
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';   
+                $this->load->library('upload', $config);
+            
+                if ($this->upload->do_upload('image')) {
+                    $data1 = array('upload_data' => $this->upload->data());
+                    $image =  $data1["upload_data"]["file_name"];
+                    $data = array(
+                        'title' =>  $title,
+                        'body' => $body,
+                        'created_at' => date("m.d.Y H:i:s"),
+                        'id_author' => 1,
+                        'id_category' => (int)$category,
+                        'img' => $image,
+                        'slug' => $this->to_slug($title),
+                        'tags' => $tags,
+                        'status' => (int)$status
+                    );
+                    $this->postmodel->create($data);
+                    echo json_encode(['success' => TRUE]);
+                }
+            }else {
+                $data['message'] = 'Field is required';
+                $data['content'] = 'admin/pages/post/add';
+                $data['categories'] = $this->categorymodel->fetch_data();
+                 echo json_encode(['message' => $data]);
+            }
+       // echo json_encode(['success' => TRUE]);
+    }
+    public function post_ajax(){
+        $columns = array( 
+                        0 =>'id', 
+                        1 =>'title',
+                        2=> 'description',
+                        3=> 'category',
+                        4=> 'author',
+                        6 => 'created_at',
+                        7 => 'status'
+                    );
+        $limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+
+       $totalData = $this->postmodel->count_all_post();
+          
+       $totalFiltered = $totalData; 
+          
+       if(empty($this->input->post('search')['value']))
+       {            
+           $posts = $this->postmodel->get_all_post($limit,$start,$order,$dir);
+       }
+       else {
+           $search = $this->input->post('search')['value']; 
+           $posts =  $this->postmodel->post_search($limit,$start,$search,$order,$dir);
+ 
+           $totalFiltered = $this->postmodel->count_post_search($search);
+       }
+       $data = array();
+       if(!empty($posts))
+       {
+           foreach ($posts as $post)
+           {
+
+               $nestedData['id'] = $post->id;
+               $nestedData['title'] = $post->title;
+               $nestedData['description'] = $post->description;
+               $nestedData['category'] = $post->id_category;
+               $nestedData['author'] = $post->id_author;
+               $nestedData['created_at'] = $post->created_at;
+               $nestedData['status'] = $post->status;
+               $nestedData['action'] = '<a href="#" style="color: #0df100"   onclick="editCategory('.$post->id.')"><span class="glyphicon glyphicon-edit"></span></a>
+                                      <a href="#" style="color: darkred" onclick="deleteCategory('.$post->id.')"><span class="glyphicon glyphicon-trash"></span></a>';
+              
+               $data[] = $nestedData;
+
+           }
+        }
+        
+        $json_data = array(
+                "draw"            => intval($this->input->post('draw')),  
+                "recordsTotal"    => intval($totalData),  
+                "recordsFiltered" => intval($totalFiltered), 
+                "data"            => $data   
+                );
+          
+        echo json_encode($json_data); 
+    }
+
 }
 
 /* End of file Post.php */

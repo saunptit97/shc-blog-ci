@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Category extends CI_Controller {
-	public function __construct()
+  public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('categorymodel');
+    $this->load->model('categorymodel');
 	}
 
 	public function index()
@@ -116,6 +116,62 @@ class Category extends CI_Controller {
      }else{
       return false;
      }
+  }
+  public function category_ajax(){
+    $columns = array( 
+                        0 =>'id', 
+                        1 =>'name',
+                        2=> 'description',
+                        3=> 'created_at',
+                        4=> 'action'
+                    );
+    $limit = $this->input->post('length');
+      $start = $this->input->post('start');
+      $order = $columns[$this->input->post('order')[0]['column']];
+      $dir = $this->input->post('order')[0]['dir'];
+
+      $totalData = $this->categorymodel->getAllCategory();
+          
+      $totalFiltered = $totalData; 
+          
+      if(empty($this->input->post('search')['value']))
+      {            
+          $posts = $this->categorymodel->allposts($limit,$start,$order,$dir);
+      }
+      else {
+          $search = $this->input->post('search')['value']; 
+
+          $posts =  $this->categorymodel->posts_search($limit,$start,$search,$order,$dir);
+
+          $totalFiltered = $this->categorymodel->posts_search_count($search);
+      }
+
+      $data = array();
+      if(!empty($posts))
+      {
+          foreach ($posts as $post)
+          {
+
+              $nestedData['id'] = $post->id;
+              $nestedData['name'] = $post->name;
+              $nestedData['description'] = $post->description;
+              $nestedData['created_at'] = $post->created_at;
+              $nestedData['action'] = '<a href="#" style="color: #0df100"   onclick="editCategory('.$post->id.')"><span class="glyphicon glyphicon-edit"></span></a>
+                                      <a href="#" style="color: darkred" onclick="deleteCategory('.$post->id.')"><span class="glyphicon glyphicon-trash"></span></a>';
+              
+              $data[] = $nestedData;
+
+          }
+      }
+        
+      $json_data = array(
+                  "draw"            => intval($this->input->post('draw')),  
+                  "recordsTotal"    => intval($totalData),  
+                  "recordsFiltered" => intval($totalFiltered), 
+                  "data"            => $data   
+                  );
+          
+      echo json_encode($json_data); 
   }
 }
 

@@ -1,6 +1,12 @@
- <style> 
-  
- </style>   
+<style>
+    #dataTables-example{
+        width: auto !important;
+    }
+    table.dataTable {
+    width: 100%;
+    margin: 0;
+}
+</style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -32,26 +38,10 @@
                         </div>
                     </div>
                     <div class="box-body">
-                    	<div class="row">
-                        <div class="col-md-4">
-                          	<div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search&hellip;" id="search" name="search" onchange="Change()">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-default" height="34px" style="height: 34px;"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                           <!--   -->
-                        </div>
-                        <div class="col-md-4">
-
-                        </div>
-                        <div class="col-md-4">
-                        </div>
-                    </div>
                         	<div class="row">
 	                        	<div class="col-md-12 data-table-cat">
                                     <div class="notify"></div>
-			                        <table id="example2" class="table table-bordered table-hover">
+			                        <table id="dataTables-example" class="table table-bordered table-hover">
 			                            <thead>
 			                            <tr>
 			                     
@@ -63,22 +53,23 @@
 			                            </tr>
 			                            </thead> 
 			                            <tbody id="result">
-			                          		<?php foreach($categories as $key => $category) : ?>
+			                          	<!-- 	<?php //foreach($categories as $key => $category) : ?>
                                             <tr>
-                                                <td> <?php echo (int) ($key+1) ?></td>
-                                                <td><?php echo  $category->name ?></td>
-                                                <td><?php echo $category->description ?></td>
-                                                <td><?php echo $category->created_at ?></td>
+                                                <td> <?php //echo (int) ($key+1) ?></td>
+                                                <td><?php //echo  $category->name ?></td>
+                                                <td><?php //echo $category->description ?></td>
+                                                <td><?php //echo $category->created_at ?></td>
                                                 <td>
-                                                    <a href="#" style="color: #0df100" onclick="editCategory(<?php echo $category->id ?>)"><span class="glyphicon glyphicon-edit"></span></a>
-                                                    <a href="#" style="color: darkred" onclick="deleteCategory(<?php echo  $category->id ?>)"><span class="glyphicon glyphicon-trash"></span></a></td>
+                                                    <a href="#" style="color: #0df100" onclick="editCategory(<?php //echo $category->id ?>)"><span class="glyphicon glyphicon-edit"></span></a>
+                                                    <a href="#" style="color: darkred" onclick="deleteCategory(<?php //echo  $category->id ?>)"><span class="glyphicon glyphicon-trash"></span></a></td>
                                             </tr>
-                                            <?php endforeach ?>
+                                            <?php //endforeach ?> -->
 			                            </tbody>
 			                        </table>
 		                    	</div>
 		                    </div>
 	                    </div>
+             
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -152,7 +143,26 @@
 </div>
 
 <script type="text/javascript">
-    
+     jQuery(document).ready(function($) {
+        $('#dataTables-example').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+            "url": "<?php echo base_url('admin/category/category_ajax') ?>",
+            "dataType": "json",
+            "type": "POST",
+            "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
+                           },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "created_at" },
+                { "data": "action"}
+                ]    
+
+        }); 
+     });
     $("#submit_category").click(function(event) {
         event.preventDefault();
         var url = '<?php echo base_url('admin/category/add') ?>';

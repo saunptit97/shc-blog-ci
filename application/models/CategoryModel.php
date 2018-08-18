@@ -3,12 +3,14 @@
 class CategoryModel extends CI_Model {
 
 	public $variable;
-
+	var $column_search = array('id','name','description');
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->database();
+
 	}
+	
 	public function fetch_data(){
 		$query = $this->db->get('category');
 		return $query->result();
@@ -41,6 +43,58 @@ class CategoryModel extends CI_Model {
         }
         return $this->db->get('category')->num_rows();
     }
+    public function getAllCategory(){
+		$query = $this->db->get('category');
+		return $query->num_rows();
+	}
+	function allposts($limit,$start,$col,$dir)
+    {   
+       $query = $this
+                ->db
+                ->limit($limit,$start)
+                ->order_by($col,$dir)
+                ->get('category');
+        
+        if($query->num_rows()>0)
+        {
+            return $query->result(); 
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+    function posts_search($limit,$start,$search,$col,$dir)
+    {
+        $query = $this
+                ->db
+                ->like('id',$search)
+                ->or_like('name',$search)
+                ->limit($limit,$start)
+                ->order_by($col,$dir)
+                ->get('category');
+        
+       
+        if($query->num_rows()>0)
+        {
+            return $query->result();  
+        }
+        else
+        {
+            return null;
+        }
+    }
+    function posts_search_count($search)
+    {
+        $query = $this
+                ->db
+                ->like('id',$search)
+                ->or_like('name',$search)
+                ->get('category');
+        return $query->num_rows();
+    } 
+
 }
 
 /* End of file CategoryModel.php */

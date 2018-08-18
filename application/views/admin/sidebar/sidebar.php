@@ -27,7 +27,7 @@
         <li class="header">MAIN NAVIGATION</li>
         <li class="treeview">
           <a href="<?php echo base_url(); ?>#">
-            <i class="fa fa-edit"></i> <span>Post</span>
+            <i class="fa fa-clone"></i> <span>Post</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -40,7 +40,7 @@
         </li>
         <li class="treeview">
           <a href="<?php echo base_url(); ?>#">
-            <i class="fa fa-edit"></i> <span>Category</span>
+            <i class="fa fa-list-alt"></i> <span>Category</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
